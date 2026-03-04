@@ -1,12 +1,31 @@
-import pandas as pd
+from fastapi import FastAPI
+from pydantic import BaseModel
+from transformers import pipeline
 
-fake = pd.read_csv("../dataset/Fake.csv")
-real = pd.read_csv("../dataset/True.csv")
+app = FastAPI()
 
-fake["label"] = 0
-real["label"] = 1
+classifier = pipeline(
+    "text-classification",
+    model="jy46604790/Fake-News-Bert-Detect"
+)
 
-data = pd.concat([fake, real])
-data = data[["text", "label"]]
+class News(BaseModel):
+    text: str
 
-print(data.head())
+@app.post("/predict")
+def predict(news: News):
+
+    result = classifier(news.text)
+
+    label = result[0]["label"]
+    score = result[0]["score"]
+
+    if label == "LABEL_1":
+        prediction = "REAL"
+    else:
+        prediction = "FAKE"
+
+    return {
+        "prediction": prediction,
+        "confidence": score
+    }
