@@ -21,52 +21,68 @@ export default function News_Form() {
     );
 
     setResult(res.data);
-
     setLoading(false);
   };
 
   return (
 
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center px-6">
 
       <AnimatedBackground />
 
-      <div className="bg-white shadow-2xl rounded-xl p-8 w-[650px]">
+      {/* Main Card */}
+      <div className="relative z-10 w-[700px] bg-[#0f1c3f]/70 backdrop-blur-xl border border-cyan-400/20 shadow-[0_0_40px_rgba(34,211,238,0.15)] rounded-2xl p-10">
 
-        <h1 className="text-3xl font-bold text-center mb-6">
+        {/* Heading */}
+        <h1 className="text-3xl font-bold text-center text-cyan-300 mb-2">
           Fake News Detector
         </h1>
 
+        <p className="text-center text-gray-300 text-sm mb-6">
+          AI powered verification system
+        </p>
+
+        {/* URL Input */}
         <input
           placeholder="Paste news URL (optional)"
-          className="w-full border p-3 rounded mb-3"
+          className="w-full bg-[#0f1c3f] border border-cyan-400/20 text-white p-3 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition"
           onChange={(e) => setUrl(e.target.value)}
         />
 
+        {/* Text Area */}
         <textarea
           placeholder="Or paste news text..."
-          className="w-full border p-3 rounded h-32"
+          className="w-full bg-[#0f1c3f] border border-cyan-400/20 text-white p-3 rounded-lg h-36 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
           onChange={(e) => setText(e.target.value)}
         />
 
+        {/* Analyze Button */}
         <button
           onClick={checkNews}
-          className="w-full mt-4 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700"
+          className="w-full mt-6 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-purple-500 to-indigo-600 hover:scale-[1.02] transition shadow-lg hover:shadow-purple-500/30"
         >
           Analyze News
         </button>
 
-        {loading && <Loader />}
+        {/* Loader */}
+        {loading && (
+          <div className="flex justify-center mt-6">
+            <Loader />
+          </div>
+        )}
 
+        {/* Result */}
         {result && !loading && (
 
-          <div className="mt-6 text-center">
+          <div className="mt-8 bg-[#0f1c3f]/80 border border-cyan-400/20 rounded-xl p-6 text-center shadow-lg">
 
-            <h2 className={`text-xl font-bold ${
-              result.prediction === "REAL"
-                ? "text-green-600"
-                : "text-red-600"
-            }`}>
+            <h2
+              className={`text-xl font-bold mb-3 ${
+                result.prediction === "REAL"
+                  ? "text-green-400"
+                  : "text-red-400"
+              }`}
+            >
 
               {result.prediction === "REAL"
                 ? "🟢 REAL NEWS"
