@@ -6,28 +6,19 @@ import TypingText from "./TypingText";
 
 export default function News_Form() {
 
-  const [input, setInput] = useState("");
+  const [text, setText] = useState("");
+  const [url, setUrl] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const checkNews = async () => {
 
-    if (!input) return;
-
     setLoading(true);
 
-    const isUrl = input.startsWith("http");
-
-    const payload = isUrl
-      ? { url: input }
-      : { text: input };
-
-    try {
-
-      const res = await axios.post(
-        "http://localhost:5000/api/predict",
-        payload
-      );
+    const res = await axios.post(
+      "http://localhost:5000/api/predict",
+      { text, url }
+    );
 
     setResult(res.data);
     setLoading(false);
@@ -93,38 +84,23 @@ export default function News_Form() {
               }`}
             >
 
-                  {result.prediction === "REAL"
-                    ? "🟢 REAL NEWS"
-                    : "🔴 FAKE NEWS"}
+              {result.prediction === "REAL"
+                ? "🟢 REAL NEWS"
+                : "🔴 FAKE NEWS"}
 
-                </h2>
+            </h2>
 
-                <TypingText
-                  text={`Confidence: ${(result.confidence * 100).toFixed(2)}%`}
-                />
-
-              </div>
-
-            )}
-
-          </div>
-
-          {/* RIGHT SIDE IMAGE */}
-
-          <div className="hidden md:block">
-
-            <img
-              src="/news-ai.png"
-              alt="Fake News Detection"
-              className="w-full"
+            <TypingText
+              text={`Confidence score: ${(result.confidence * 100).toFixed(2)}%`}
             />
 
           </div>
 
-        </div>
+        )}
 
       </div>
 
     </div>
+
   );
 }
