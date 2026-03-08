@@ -1,9 +1,13 @@
+import Navbar from "./component/Navbar";
+import Hero from "./component/Hero";
 import NewsForm from "./component/News_Form";
 
 function App() {
   return (
     <div>
-      <NewsForm/>
+      <Navbar />
+      <Hero />
+      <NewsForm />
     </div>
   );
 }

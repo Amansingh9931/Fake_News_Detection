@@ -29,78 +29,69 @@ export default function News_Form() {
         payload
       );
 
-      setResult(res.data);
-
-    } catch (err) {
-      console.error(err);
-    }
-
+    setResult(res.data);
     setLoading(false);
   };
 
   return (
 
-    <div className="relative">
+    <div className="min-h-screen flex items-center justify-center px-6">
 
       <AnimatedBackground />
 
-      {/* HERO SECTION */}
+      {/* Main Card */}
+      <div className="relative z-10 w-[700px] bg-[#0f1c3f]/70 backdrop-blur-xl border border-cyan-400/20 shadow-[0_0_40px_rgba(34,211,238,0.15)] rounded-2xl p-10">
 
-      <div className="min-h-screen flex items-center justify-center px-6">
+        {/* Heading */}
+        <h1 className="text-3xl font-bold text-center text-cyan-300 mb-2">
+          Fake News Detector
+        </h1>
 
-        <div className="max-w-6xl grid md:grid-cols-2 gap-10 items-center">
+        <p className="text-center text-gray-300 text-sm mb-6">
+          AI powered verification system
+        </p>
 
-          {/* LEFT SIDE TEXT */}
+        {/* URL Input */}
+        <input
+          placeholder="Paste news URL (optional)"
+          className="w-full bg-[#0f1c3f] border border-cyan-400/20 text-white p-3 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition"
+          onChange={(e) => setUrl(e.target.value)}
+        />
 
-          <div>
+        {/* Text Area */}
+        <textarea
+          placeholder="Or paste news text..."
+          className="w-full bg-[#0f1c3f] border border-cyan-400/20 text-white p-3 rounded-lg h-36 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+          onChange={(e) => setText(e.target.value)}
+        />
 
-            <h1 className="text-5xl font-bold text-white leading-tight">
+        {/* Analyze Button */}
+        <button
+          onClick={checkNews}
+          className="w-full mt-6 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-purple-500 to-indigo-600 hover:scale-[1.02] transition shadow-lg hover:shadow-purple-500/30"
+        >
+          Analyze News
+        </button>
 
-              Detect Fake News <br />
-              with AI Accuracy
+        {/* Loader */}
+        {loading && (
+          <div className="flex justify-center mt-6">
+            <Loader />
+          </div>
+        )}
 
-            </h1>
+        {/* Result */}
+        {result && !loading && (
 
-            <p className="text-gray-200 mt-5 text-lg">
+          <div className="mt-8 bg-[#0f1c3f]/80 border border-cyan-400/20 rounded-xl p-6 text-center shadow-lg">
 
-              Analyze news articles and determine if they are
-              real or fake within seconds using AI.
-
-            </p>
-
-            {/* INPUT BOX */}
-
-            <div className="mt-8 flex bg-white rounded-xl shadow-xl overflow-hidden">
-
-              <input
-                type="text"
-                placeholder="Paste News URL or Text..."
-                className="flex-1 p-4 outline-none text-gray-700"
-                onChange={(e) => setInput(e.target.value)}
-              />
-
-              <button
-                onClick={checkNews}
-                className="bg-orange-500 text-white px-6 font-semibold hover:bg-orange-600"
-              >
-                Verify Now
-              </button>
-
-            </div>
-
-            {loading && <Loader />}
-
-            {/* RESULT */}
-
-            {result && !loading && (
-
-              <div className="mt-6 bg-white p-4 rounded-lg shadow">
-
-                <h2 className={`text-xl font-bold ${
-                  result.prediction === "REAL"
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}>
+            <h2
+              className={`text-xl font-bold mb-3 ${
+                result.prediction === "REAL"
+                  ? "text-green-400"
+                  : "text-red-400"
+              }`}
+            >
 
                   {result.prediction === "REAL"
                     ? "🟢 REAL NEWS"
