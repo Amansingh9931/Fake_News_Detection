@@ -6,85 +6,134 @@ import TypingText from "./TypingText";
 
 export default function News_Form() {
 
-  const [text, setText] = useState("");
-  const [url, setUrl] = useState("");
+  const [input, setInput] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const checkNews = async () => {
 
+    if (!input) return;
+
     setLoading(true);
 
-    const res = await axios.post(
-      "http://localhost:5000/api/predict",
-      { text, url }
-    );
+    const isUrl = input.startsWith("http");
 
-    setResult(res.data);
+    const payload = isUrl
+      ? { url: input }
+      : { text: input };
+
+    try {
+
+      const res = await axios.post(
+        "http://localhost:5000/api/predict",
+        payload
+      );
+
+      setResult(res.data);
+
+    } catch (err) {
+      console.error(err);
+    }
 
     setLoading(false);
   };
 
   return (
 
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="relative">
 
       <AnimatedBackground />
 
-      <div className="bg-white shadow-2xl rounded-xl p-8 w-[650px]">
+      {/* HERO SECTION */}
 
-        <h1 className="text-3xl font-bold text-center mb-6">
-          Fake News Detector
-        </h1>
+      <div className="min-h-screen flex items-center justify-center px-6">
 
-        <input
-          placeholder="Paste news URL (optional)"
-          className="w-full border p-3 rounded mb-3"
-          onChange={(e) => setUrl(e.target.value)}
-        />
+        <div className="max-w-6xl grid md:grid-cols-2 gap-10 items-center">
 
-        <textarea
-          placeholder="Or paste news text..."
-          className="w-full border p-3 rounded h-32"
-          onChange={(e) => setText(e.target.value)}
-        />
+          {/* LEFT SIDE TEXT */}
 
-        <button
-          onClick={checkNews}
-          className="w-full mt-4 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700"
-        >
-          Analyze News
-        </button>
+          <div>
 
-        {loading && <Loader />}
+            <h1 className="text-5xl font-bold text-white leading-tight">
 
-        {result && !loading && (
+              Detect Fake News <br />
+              with AI Accuracy
 
-          <div className="mt-6 text-center">
+            </h1>
 
-            <h2 className={`text-xl font-bold ${
-              result.prediction === "REAL"
-                ? "text-green-600"
-                : "text-red-600"
-            }`}>
+            <p className="text-gray-200 mt-5 text-lg">
 
-              {result.prediction === "REAL"
-                ? "🟢 REAL NEWS"
-                : "🔴 FAKE NEWS"}
+              Analyze news articles and determine if they are
+              real or fake within seconds using AI.
 
-            </h2>
+            </p>
 
-            <TypingText
-              text={`Confidence score: ${(result.confidence * 100).toFixed(2)}%`}
+            {/* INPUT BOX */}
+
+            <div className="mt-8 flex bg-white rounded-xl shadow-xl overflow-hidden">
+
+              <input
+                type="text"
+                placeholder="Paste News URL or Text..."
+                className="flex-1 p-4 outline-none text-gray-700"
+                onChange={(e) => setInput(e.target.value)}
+              />
+
+              <button
+                onClick={checkNews}
+                className="bg-orange-500 text-white px-6 font-semibold hover:bg-orange-600"
+              >
+                Verify Now
+              </button>
+
+            </div>
+
+            {loading && <Loader />}
+
+            {/* RESULT */}
+
+            {result && !loading && (
+
+              <div className="mt-6 bg-white p-4 rounded-lg shadow">
+
+                <h2 className={`text-xl font-bold ${
+                  result.prediction === "REAL"
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}>
+
+                  {result.prediction === "REAL"
+                    ? "🟢 REAL NEWS"
+                    : "🔴 FAKE NEWS"}
+
+                </h2>
+
+                <TypingText
+                  text={`Confidence: ${(result.confidence * 100).toFixed(2)}%`}
+                />
+
+              </div>
+
+            )}
+
+          </div>
+
+          {/* RIGHT SIDE IMAGE */}
+
+          <div className="hidden md:block">
+
+            <img
+              src="/news-ai.png"
+              alt="Fake News Detection"
+              className="w-full"
             />
 
           </div>
 
-        )}
+        </div>
 
       </div>
 
     </div>
-
   );
 }

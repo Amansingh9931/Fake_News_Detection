@@ -5,7 +5,7 @@ export default function AnimatedBackground() {
   const bubbles = Array.from({ length: 15 });
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-700 to-black">
+    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none bg-gradient-to-br from-indigo-600 via-purple-700 to-black">
 
       {bubbles.map((_, i) => (
 
