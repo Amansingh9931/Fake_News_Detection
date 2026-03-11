@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import robotImage from "../assets/ai-robot.png";
 export default function AIRobot() {
   return (
-    <div className="absolute right-[3%] top-[20%] z-10">
+    <div className="absolute right-[3%] top-[20%] z-10 pointer-events-none">
 
       {/* Robot */}
       <motion.img

@@ -5,7 +5,7 @@ export default function AIParticles() {
   const particles = Array.from({ length: 15 });
 
   return (
-    <div className="absolute right-[2%] top-[15%] w-[400px] h-[300px] pointer-events-none">
+    <div className="absolute right-[2%] top-[15%] w-[300px] h-[220px] pointer-events-none hidden sm:flex">
 
       {particles.map((_, i) => (
 

@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+/* global resets and background */
+html, body {
+  @apply antialiased text-gray-100;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: linear-gradient(135deg, #0f1c3f 0%, #1f2a5a 100%);
+  font-family: 'Quicksand', sans-serif;
+}
